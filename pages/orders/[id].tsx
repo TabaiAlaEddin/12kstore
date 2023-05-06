@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 
 import { Box, Card, CardContent, Chip, CircularProgress, Divider, Grid, Typography } from "@mui/material";
 import { CreditCardOffOutlined, CreditScoreOutlined } from "@mui/icons-material";
-import { PayPalButtons } from "@paypal/react-paypal-js";
 
 import { CartList, OrderSummary } from "../../components/cart";
 import { ShopLayout } from "../../components/layouts";
@@ -30,27 +29,7 @@ const OrderPage: NextPage<Props> = ({ order }) => {
 
 	const { shippingAddress } = order;
 
-	const onOrderCompleted = async (details: OrderResponseBody) => {
-		if (details.status !== "COMPLETED") {
-			return alert("There are not pay on Paypal");
-		}
 
-		setIsPaying(true);
-
-		try {
-			const { data } = await tesloApi.post("/orders/pay", {
-				transactionId: details.id,
-				orderId: order._id
-			});
-
-			router.reload();
-		} catch (error) {
-			setIsPaying(true);
-
-			console.log(error);
-			alert("Error");
-		}
-	};
 
 	return (
 		<ShopLayout title='Order Summary' pageDescription='Summary of the Order'>
@@ -138,24 +117,7 @@ const OrderPage: NextPage<Props> = ({ order }) => {
 											icon={<CreditScoreOutlined />}
 										/>
 									) : (
-										<PayPalButtons
-											createOrder={(data, actions) => {
-												return actions.order.create({
-													purchase_units: [
-														{
-															amount: {
-																value: `${order.total}`
-															}
-														}
-													]
-												});
-											}}
-											onApprove={(data, actions) => {
-												return actions.order!.capture().then(details => {
-													onOrderCompleted(details);
-												});
-											}}
-										/>
+										<button>paypal button</button>
 									)}
 								</Box>
 							</Box>

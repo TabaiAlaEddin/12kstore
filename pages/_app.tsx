@@ -10,7 +10,6 @@ import { SessionProvider } from "next-auth/react";
 
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { SWRConfig } from "swr";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 import { lightTheme } from "../themes/light-theme";
 import { UiProvider, CartProvider, AuthProvider } from "../context";
@@ -22,7 +21,6 @@ interface Props extends AppProps {
 const App = ({ Component, pageProps: { session, ...pageProps } }: Props) => {
 	return (
 		<SessionProvider session={session}>
-			<PayPalScriptProvider options={{"client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || ''}}>
 				<SWRConfig
 					value={{
 						refreshInterval: 3000,
@@ -40,7 +38,6 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: Props) => {
 						</CartProvider>
 					</AuthProvider>
 				</SWRConfig>
-			</PayPalScriptProvider>
 		</SessionProvider>
 	);
 };
