@@ -23,9 +23,15 @@ export const connect = async () => {
 		await mongoose.disconnect();
 	}
 	const dbURL = process.env.NODE_ENV === "production" ? process.env.MONGO_URL : process.env.MONGO_LOCAL_URL;
-	await mongoose.connect(dbURL || "");
-	mongooConnection.isConnected = 1;
-	console.log("MongoDB connected:", dbURL);
+	mongoose
+		.connect(dbURL || "", {
+			autoCreate: true,
+			autoIndex: true
+		})
+		.then(() => {
+			mongooConnection.isConnected = 1;
+			console.log("MongoDB connected:", dbURL);
+		});
 };
 
 export const disconnect = async () => {
